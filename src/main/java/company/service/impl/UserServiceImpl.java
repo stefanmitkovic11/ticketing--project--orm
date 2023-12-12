@@ -6,6 +6,7 @@ import company.mapper.UserMapper;
 import company.repository.UserRepository;
 import company.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,6 +62,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteByUserName(String username) {
-        userRepository.delete(userMapper.convertToEntity(findByUserName(username)));
+        userRepository.deleteByUserName(username);
     }
 }
