@@ -6,7 +6,6 @@ import company.mapper.UserMapper;
 import company.repository.UserRepository;
 import company.service.UserService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> findAllUsers() {
-        return userRepository.findAll().stream().map(userMapper::convertToDTO).collect(Collectors.toList());
+        return userRepository.findAll().stream().filter(user -> !user.getIsDeleted()).map(userMapper::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -64,4 +63,13 @@ public class UserServiceImpl implements UserService {
     public void deleteByUserName(String username) {
         userRepository.deleteByUserName(username);
     }
+
+    @Override
+    public void delete(String username) {
+        User user = userRepository.findByUserName(username);
+        user.setIsDeleted(true);
+        userRepository.save(user);
+    }
+
+
 }

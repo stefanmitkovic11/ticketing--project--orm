@@ -7,6 +7,7 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
 
 import java.time.LocalDateTime;
 
@@ -23,5 +24,6 @@ public class BaseEntity {
     private Long insertUserId;
     private LocalDateTime lastUpdateDateTime;
     private Long lastUpdateUserId;
+    private Boolean isDeleted = false;
 
 }
