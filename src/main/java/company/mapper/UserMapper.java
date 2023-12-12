@@ -24,7 +24,7 @@ public class UserMapper {
 
 //    Convert to DTO
 
-    public UserDTO convertToDto(User user){
+    public UserDTO convertToDTO(User user){
 
         return mapper.map(user,UserDTO.class);
     }
