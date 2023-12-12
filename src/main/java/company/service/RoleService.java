@@ -1,6 +1,14 @@
 package company.service;
 
-import com.cydeo.dto.RoleDTO;
+import company.dto.RoleDTO;
 
-public interface RoleService extends CrudService<RoleDTO, Long> {
+import java.util.List;
+
+public interface RoleService {
+
+    List<RoleDTO> findAllRoles();
+
+    RoleDTO findById(Long id);
+
+
 }

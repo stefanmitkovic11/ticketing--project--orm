@@ -1,11 +1,14 @@
 package company.entity;
 
-import com.cydeo.enums.Gender;
+import company.enums.Gender;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "users")
 @NoArgsConstructor
 @Data
 public class User extends BaseEntity {
@@ -16,7 +19,10 @@ public class User extends BaseEntity {
     private String passWord;
     private boolean enabled;
     private String phone;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
     private Role role;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     public User(Long id, LocalDateTime insertDateTime, Long insertUserId, LocalDateTime lastUpdateDateTime, Long lastUpdateUserId, String firstName, String lastName, String userName, String passWord, boolean enabled, String phone, Role role, Gender gender) {

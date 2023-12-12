@@ -1,13 +1,21 @@
 package company.service;
 
-import com.cydeo.dto.UserDTO;
+import company.dto.UserDTO;
+import company.entity.User;
+import org.springframework.stereotype.Service;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 
-public interface UserService extends CrudService<UserDTO, String> {
+public interface UserService {
 
-    List<UserDTO> findManagers();
+    List<UserDTO> findAllUsers();
 
-    List<UserDTO> findEmployees();
+    UserDTO findByUserName(String username);
 
+    void save(UserDTO user);
+
+    UserDTO update(UserDTO user);
+
+    void deleteByUserName(String username);
 }
