@@ -20,16 +20,14 @@ public class RoleServiceImpl implements RoleService {
         this.roleMapper = roleMapper;
     }
 
-
     @Override
-    public List<RoleDTO> findAllRoles() {
-
-
+    public List<RoleDTO> listAllRoles() {
         return roleRepository.findAll().stream().map(roleMapper::convertToDto).collect(Collectors.toList());
     }
 
     @Override
     public RoleDTO findById(Long id) {
+
         return roleMapper.convertToDto(roleRepository.findById(id).get());
     }
 }

@@ -1,33 +1,31 @@
 package company.converter;
 
-import company.dto.RoleDTO;
-import company.service.RoleService;
+import company.dto.ProjectDTO;
+import company.service.ProjectService;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @ConfigurationPropertiesBinding
-public class RoleDtoConverter implements Converter<String, RoleDTO> {
+public class ProjectDtoConverter implements Converter<String, ProjectDTO> {
 
-    RoleService roleService;
 
-    //injection
-    public RoleDtoConverter(@Lazy RoleService roleService) {
+    ProjectService projectService;
 
-        this.roleService = roleService;
+    public ProjectDtoConverter(@Lazy ProjectService projectService) {
+        this.projectService = projectService;
     }
 
     @Override
-    public RoleDTO convert(String source) {
+    public ProjectDTO convert(String source) {
 
         if (source == null || source.equals("")) {
             return null;
         }
 
-        return roleService.findById(Long.parseLong(source));
+        return projectService.getByProjectCode(source);
 
     }
 

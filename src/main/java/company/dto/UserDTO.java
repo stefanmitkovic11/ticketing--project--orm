@@ -10,11 +10,22 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+
 public class UserDTO {
+
+    private Long id;
 
     @NotBlank
     @Size(max = 15, min = 2)
     private String firstName;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     @NotBlank
     @Size(max = 15, min = 2)
@@ -124,5 +135,6 @@ public class UserDTO {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
+
 
 }

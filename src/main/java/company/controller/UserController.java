@@ -14,20 +14,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
 
-    RoleService roleService;
-    UserService userService;
+    private final UserService userService;
+    private final RoleService roleService;
 
-    public UserController(RoleService roleService, UserService userService) {
-        this.roleService = roleService;
+    public UserController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping("/create")
     public String createUser(Model model) {
 
         model.addAttribute("user", new UserDTO());
-        model.addAttribute("roles", roleService.findAllRoles());
-        model.addAttribute("users", userService.findAllUsers());
+        model.addAttribute("roles", roleService.listAllRoles());
+        model.addAttribute("users", userService.listAllUsers());
 
         return "/user/create";
     }
@@ -38,13 +38,12 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
 
-            model.addAttribute("roles", roleService.findAllRoles());
-            model.addAttribute("users", userService.findAllUsers());
+            model.addAttribute("roles", roleService.listAllRoles());
+            model.addAttribute("users", userService.listAllUsers());
 
             return "/user/create";
 
         }
-
 
         userService.save(user);
         return "redirect:/user/create";
@@ -55,8 +54,8 @@ public class UserController {
     public String editUser(@PathVariable("username") String username, Model model) {
 
         model.addAttribute("user", userService.findByUserName(username));
-        model.addAttribute("roles", roleService.findAllRoles());
-        model.addAttribute("users", userService.findAllUsers());
+        model.addAttribute("roles", roleService.listAllRoles());
+        model.addAttribute("users", userService.listAllUsers());
 
         return "/user/update";
 
@@ -67,8 +66,8 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
 
-            model.addAttribute("roles", roleService.findAllRoles());
-            model.addAttribute("users", userService.findAllUsers());
+            model.addAttribute("roles", roleService.listAllRoles());
+            model.addAttribute("users", userService.listAllUsers());
 
             return "/user/update";
 
@@ -82,7 +81,6 @@ public class UserController {
     @GetMapping("/delete/{username}")
     public String deleteUser(@PathVariable("username") String username) {
 //        userService.deleteByUserName(username);
-
         userService.delete(username);
         return "redirect:/user/create";
     }

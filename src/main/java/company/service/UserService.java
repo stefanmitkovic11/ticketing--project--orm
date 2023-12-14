@@ -9,15 +9,12 @@ import java.util.List;
 
 public interface UserService {
 
-    List<UserDTO> findAllUsers();
-
+    List<UserDTO> listAllUsers();
     UserDTO findByUserName(String username);
-
-    void save(UserDTO user);
-
-    UserDTO update(UserDTO user);
-
+    void save(UserDTO dto);
+    UserDTO update(UserDTO dto);
     void deleteByUserName(String username);
-
     void delete(String username);
+    List<UserDTO> listAllByRole(String role);
+
 }

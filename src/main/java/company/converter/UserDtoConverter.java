@@ -14,17 +14,15 @@ public class UserDtoConverter implements Converter<String, UserDTO> {
     UserService userService;
 
     public UserDtoConverter(@Lazy UserService userService) {
+
         this.userService = userService;
     }
 
     @Override
     public UserDTO convert(String source) {
 
-        if (source == null || source.equals("")) {
-            return null;
-        }
-
         return userService.findByUserName(source);
     }
+
 
 }
