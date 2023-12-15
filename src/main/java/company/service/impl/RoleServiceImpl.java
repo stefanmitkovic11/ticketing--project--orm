@@ -1,6 +1,7 @@
 package company.service.impl;
 
 import company.dto.RoleDTO;
+import company.mapper.MapperUtil;
 import company.mapper.RoleMapper;
 import company.repository.RoleRepository;
 import company.service.RoleService;
@@ -13,21 +14,25 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
-    private final RoleMapper roleMapper;
+    private final MapperUtil mapperUtil;
 
-    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper) {
+    public RoleServiceImpl(RoleRepository roleRepository, MapperUtil mapperUtil) {
         this.roleRepository = roleRepository;
-        this.roleMapper = roleMapper;
+        this.mapperUtil = mapperUtil;
     }
 
     @Override
     public List<RoleDTO> listAllRoles() {
-        return roleRepository.findAll().stream().map(roleMapper::convertToDto).collect(Collectors.toList());
+//        return roleRepository.findAll().stream().map(roleMapper::convertToDto).collect(Collectors.toList());
+        return roleRepository.findAll().stream().map(role -> mapperUtil.convert(role, new RoleDTO())).collect(Collectors.toList());
+
     }
 
     @Override
     public RoleDTO findById(Long id) {
 
-        return roleMapper.convertToDto(roleRepository.findById(id).get());
+//        return roleMapper.convertToDto(roleRepository.findById(id).get());
+
+        return mapperUtil.convert(roleRepository.findById(id).get(),new RoleDTO());
     }
 }
