@@ -1,10 +1,15 @@
 package company.service.impl;
 
+import company.dto.ProjectDTO;
+import company.dto.TaskDTO;
 import company.dto.UserDTO;
 import company.entity.User;
 import company.mapper.UserMapper;
 import company.repository.UserRepository;
+import company.service.ProjectService;
+import company.service.TaskService;
 import company.service.UserService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +22,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ProjectService projectService;
+    private final TaskService taskService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, @Lazy ProjectService projectService, TaskService taskService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.projectService = projectService;
+        this.taskService = taskService;
     }
 
     @Override
@@ -67,8 +76,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(String username) {
         User user = userRepository.findByUserName(username);
-        user.setIsDeleted(true);
-        userRepository.save(user);
+
+        if (checkIfUserCanBeDeleted(userMapper.convertToDTO(user))) {
+            user.setIsDeleted(true);
+            user.setUserName(user.getUserName()+"-"+user.getId());
+            userRepository.save(user);
+        }
     }
 
     @Override
@@ -77,6 +90,22 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAllByRoleDescriptionIgnoreCase(role);
 
         return users.stream().map(userMapper::convertToDTO).collect(Collectors.toList());
+    }
+
+    private boolean checkIfUserCanBeDeleted(UserDTO userDTO) {
+
+        return switch (userDTO.getRole().getDescription()) {
+            case "Manager" -> {
+                List<ProjectDTO> projectDTOList = projectService.listAllByAssignedManager(userDTO);
+                yield projectDTOList.isEmpty();
+            }
+            case "Employee" -> {
+                List<TaskDTO> taskDTOList = taskService.listAllByAssignedEmployee(userDTO);
+                yield taskDTOList.isEmpty();
+            }
+            default -> true;
+        };
+
     }
 
 

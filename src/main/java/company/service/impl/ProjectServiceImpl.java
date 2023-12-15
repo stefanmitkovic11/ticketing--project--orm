@@ -11,6 +11,7 @@ import company.repository.ProjectRepository;
 import company.service.ProjectService;
 import company.service.TaskService;
 import company.service.UserService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserMapper userMapper;
     private final TaskService taskService;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper, UserService userService, UserMapper userMapper, TaskService taskService) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper,@Lazy UserService userService, UserMapper userMapper, TaskService taskService) {
         this.projectRepository = projectRepository;
         this.projectMapper = projectMapper;
         this.userService = userService;
@@ -78,6 +79,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findByProjectCode(code);
         project.setIsDeleted(true);
         projectRepository.save(project);
+        taskService.deleteByProject(projectMapper.convertToDto(project));
 
     }
 
@@ -85,6 +87,7 @@ public class ProjectServiceImpl implements ProjectService {
     public void complete(String projectCode) {
         Project project = projectRepository.findByProjectCode(projectCode);
         project.setProjectStatus(Status.COMPLETE);
+        taskService.completeByProject(projectMapper.convertToDto(project));
         projectRepository.save(project);
     }
 
@@ -108,6 +111,12 @@ public class ProjectServiceImpl implements ProjectService {
             return obj;
 
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProjectDTO> listAllByAssignedManager(UserDTO assignedManager) {
+        List<Project> list = projectRepository.findAllByAssignedManager(userMapper.convertToEntity(assignedManager));
+        return list.stream().map(projectMapper::convertToDto).collect(Collectors.toList());
     }
 
 }
