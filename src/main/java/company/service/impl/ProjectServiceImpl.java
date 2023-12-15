@@ -1,11 +1,16 @@
 package company.service.impl;
 
 import company.dto.ProjectDTO;
+import company.dto.UserDTO;
 import company.entity.Project;
+import company.entity.User;
 import company.enums.Status;
 import company.mapper.ProjectMapper;
+import company.mapper.UserMapper;
 import company.repository.ProjectRepository;
 import company.service.ProjectService;
+import company.service.TaskService;
+import company.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +22,16 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
+    private final UserService userService;
+    private final UserMapper userMapper;
+    private final TaskService taskService;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper, UserService userService, UserMapper userMapper, TaskService taskService) {
         this.projectRepository = projectRepository;
         this.projectMapper = projectMapper;
+        this.userService = userService;
+        this.userMapper = userMapper;
+        this.taskService = taskService;
     }
 
     @Override
@@ -75,6 +86,28 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findByProjectCode(projectCode);
         project.setProjectStatus(Status.COMPLETE);
         projectRepository.save(project);
+    }
+
+    @Override
+    public List<ProjectDTO> listAllProjectDetails() {
+
+        UserDTO currentUserDto = userService.findByUserName("manager@gmail.com");
+
+        User user = userMapper.convertToEntity(currentUserDto);
+
+        List<Project> list = projectRepository.findAllByAssignedManager(user);
+
+
+        return list.stream().map(project -> {
+            ProjectDTO obj = projectMapper.convertToDto(project);
+
+            obj.setUnfinishedTaskCounts(taskService.totalNonCompletedTask(project.getProjectCode()));
+            obj.setCompleteTaskCounts(taskService.totalCompletedTask(project.getProjectCode()));
+
+
+            return obj;
+
+        }).collect(Collectors.toList());
     }
 
 }

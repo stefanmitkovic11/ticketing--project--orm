@@ -1,6 +1,7 @@
 package company.controller;
 
 import company.dto.ProjectDTO;
+import company.dto.UserDTO;
 import company.service.ProjectService;
 import company.service.UserService;
 import jakarta.validation.Valid;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.StreamTokenizer;
+import java.util.List;
 
 @Controller
 @RequestMapping("/project")
@@ -93,14 +97,19 @@ public class ProjectController {
     }
 
 
-//    @GetMapping("/manager/project-status")
-//    public String getProjectByManager(Model model) {
+    @GetMapping("/manager/project-status")
+    public String getProjectByManager(Model model) {
+
+        List<ProjectDTO> projects = projectService.listAllProjectDetails();
+
+        model.addAttribute("projects", projects);
+
+        return "/manager/project-status";
+    }
+
+//    public String managerCompleteProject(@PathVariable("projectCode") String projectCode){
 //
-//        List<ProjectDTO> projects = projectService.listAllProjectDetails();
-//
-//        model.addAttribute("projects", projects);
-//
-//        return "/manager/project-status";
+//        return "redirect:/project/manager/project-status";
 //    }
 
 }
