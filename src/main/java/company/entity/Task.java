@@ -1,12 +1,12 @@
 package company.entity;
 
 import company.enums.Status;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity

@@ -1,11 +1,10 @@
 package company.dto;
 
 import company.enums.Status;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.UUID;
 

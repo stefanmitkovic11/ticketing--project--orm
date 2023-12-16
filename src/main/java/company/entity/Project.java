@@ -1,7 +1,8 @@
 package company.entity;
 
 import company.enums.Status;
-import jakarta.persistence.*;
+
+import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Where;
 

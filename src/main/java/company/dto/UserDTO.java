@@ -1,7 +1,7 @@
 package company.dto;
 
 import company.enums.Gender;
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
