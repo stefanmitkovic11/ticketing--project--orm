@@ -12,6 +12,8 @@ import company.mapper.UserMapper;
 import company.repository.TaskRepository;
 import company.repository.UserRepository;
 import company.service.TaskService;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -102,14 +104,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDTO> listAllTasksByStatusIsNot(Status status) {
-        User loggedInUser = userRepository.findByUserName("john@employee.com");
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User loggedInUser = userRepository.findByUserName(username);
         List<Task> list = taskRepository.findAllTasksByTaskStatusIsNotAndAssignedEmployee(status, loggedInUser);
         return list.stream().map(taskMapper::convertToDto).collect(Collectors.toList());
     }
 
     @Override
     public List<TaskDTO> listAllTasksByStatus(Status status) {
-        User loggedInUser = userRepository.findByUserName("john@employee.com");
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User loggedInUser = userRepository.findByUserName(username);
         List<Task> list = taskRepository.findAllTasksByTaskStatusAndAssignedEmployee(status, loggedInUser);
         return list.stream().map(taskMapper::convertToDto).collect(Collectors.toList());
     }

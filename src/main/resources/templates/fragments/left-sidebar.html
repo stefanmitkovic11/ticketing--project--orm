@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <body>
 
@@ -21,8 +22,9 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav flex-column">
                         <li class="nav-divider"></li>
+<!--                        <li class="nav-item" sec:authorize="hasAnyAuthority('Admin','Manager')">-->
                         <li class="nav-item">
-                            <a class="nav-link active"
+                        <a class="nav-link active"
                                href="#"
                                data-toggle="collapse"
                                aria-expanded="false"
@@ -53,8 +55,9 @@
                             </a>
                             <div id="submenu-2" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
+<!--                                    <li class="nav-item" sec:authorize="hasAnyAuthority('Manager')">-->
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/task/create}">Task Create
+                                    <a class="nav-link" th:href="@{/task/create}">Task Create
                                             <span class="badge badge-secondary">New</span></a>
                                     </li>
                                     <li class="nav-item">
@@ -75,8 +78,9 @@
                             </a>
                             <div id="submenu-3" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
+<!--                                    <li class="nav-item" sec:authorize="hasAnyAuthority('Employee')">-->
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/task/employee/pending-tasks}">Pending Tasks</a>
+                                    <a class="nav-link" th:href="@{/task/employee/pending-tasks}">Pending Tasks</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" th:href="@{/task/employee/archive}">Archive</a>
